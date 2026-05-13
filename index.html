@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero Electoral Lima 2026 — Hora de Instalación vs. Participación</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #151820;
+    --surface2: #1c2030;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4f8ef7;
+    --accent2: #e85d3a;
+    --accent3: #34c98b;
+    --text: #e8eaf0;
+    --text-muted: #7a8099;
+    --text-dim: #4a5068;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-head);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .header-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  h1 span { color: var(--accent); }
+  .header-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    line-height: 1.6;
+  }
+
+  /* ── KPIs ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 1.75rem;
+  }
+  @media (max-width: 800px) { .kpi-row { grid-template-columns: repeat(2,1fr); } }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--kpi-accent, var(--accent));
+    opacity: 0.65;
+  }
+  .kpi:hover { border-color: rgba(255,255,255,0.14); }
+  .kpi-label {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.55rem;
+  }
+  .kpi-val {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--text);
+  }
+  .kpi-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 5px;
+  }
+
+  /* ── Insight banner ── */
+  .insight {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    border-radius: 10px;
+    padding: 1rem 1.35rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.5s ease 0.22s both;
+  }
+  .insight-item { flex: 1; min-width: 200px; }
+  .insight-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent3);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .insight-text { font-size: 13px; color: var(--text); line-height: 1.55; }
+
+  /* ── Charts ── */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 800px) { .charts-row { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    animation: fadeUp 0.5s ease 0.35s both;
+  }
+  .card-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .leg-sq  { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .leg-line{ width:16px; height:2px; border-radius:1px; flex-shrink:0; }
+  .note {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 9px;
+    line-height: 1.55;
+  }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .kpi:nth-child(1){ animation-delay:.04s }
+  .kpi:nth-child(2){ animation-delay:.09s }
+  .kpi:nth-child(3){ animation-delay:.14s }
+  .kpi:nth-child(4){ animation-delay:.19s }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-tag">ONPE · Elecciones Generales 2026 · Lima, Perú</div>
+    <h1>Hora de instalación de mesa<br><span>vs. Participación ciudadana</span></h1>
+    <div class="header-sub">
+      Muestra: 379 mesas contabilizadas · 40 distritos · Provincia de Lima<br>
+      Horas imputadas al rango oficial: mesas antes de 07:00 → 07:00 · mesas después de 14:00 → 14:00
+    </div>
+  </header>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi" style="--kpi-accent:#4f8ef7">
+      <div class="kpi-label">Participación promedio</div>
+      <div class="kpi-val">79.7%</div>
+      <div class="kpi-sub">sobre 379 mesas válidas</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#e85d3a">
+      <div class="kpi-label">Hora promedio instalación</div>
+      <div class="kpi-val">08:09</div>
+      <div class="kpi-sub">rango oficial: 07:00 – 14:00</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#a78bfa">
+      <div class="kpi-label">Correlación Pearson r</div>
+      <div class="kpi-val" style="color:#a78bfa">−0.111</div>
+      <div class="kpi-sub">p = 0.031 · significativa (α = 5%)</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#f59e0b">
+      <div class="kpi-label">Mesas registradas antes 7am</div>
+      <div class="kpi-val" style="color:#f59e0b">36</div>
+      <div class="kpi-sub">9.5% del total · imputadas a 07:00</div>
+    </div>
+  </div>
+
+  <!-- INSIGHT BANNER -->
+  <div class="insight">
+    <div class="insight-item">
+      <span class="insight-tag">📌 Hallazgo principal</span>
+      <span class="insight-text">Existe una correlación negativa débil pero estadísticamente significativa (r = −0.111, p &lt; 0.05): a mayor hora de instalación, menor participación ciudadana.</span>
+    </div>
+    <div class="insight-item">
+      <span class="insight-tag">⏰ Franja de mayor participación</span>
+      <span class="insight-text">Las 237 mesas instaladas en la franja de las <strong>07:00</strong> (62.5% del total) registran la mayor participación promedio: <strong>80.5%</strong>.</span>
+    </div>
+    <div class="insight-item">
+      <span class="insight-tag">⚠️ Imputación aplicada</span>
+      <span class="insight-text"><strong>36</strong> mesas con registro anterior a 07:00 fueron llevadas a 07:00. <strong>1</strong> mesa con registro posterior a 14:00 fue llevada a 14:00.</span>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-title">Dispersión — hora de instalación vs. participación ciudadana</div>
+      <div style="position:relative;height:320px"><canvas id="scatterChart"></canvas></div>
+      <div class="legend">
+        <span><span class="leg-sq" style="background:rgba(79,142,247,0.7)"></span>Mesa individual</span>
+        <span><span class="leg-line" style="background:#e85d3a"></span>Línea de tendencia</span>
+      </div>
+      <div class="note">La columna vertical en 07:00 incluye las 36 mesas imputadas al límite inferior del rango oficial.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Participación promedio por franja horaria de instalación</div>
+      <div style="position:relative;height:320px"><canvas id="barChart"></canvas></div>
+      <div class="legend">
+        <span><span class="leg-sq" style="background:rgba(52,201,139,0.85)"></span>Alta (≥ 80%)</span>
+        <span><span class="leg-sq" style="background:rgba(79,142,247,0.85)"></span>Media (77–80%)</span>
+        <span><span class="leg-sq" style="background:rgba(232,93,58,0.85)"></span>Baja (&lt; 77%)</span>
+      </div>
+      <div class="note">Franja 07h concentra el 62.5% de mesas (n = 237). El número dentro de cada barra indica cuántas mesas componen esa franja.</div>
+    </div>
+  </div>
+
+  <footer>Fuente: ONPE — Muestra de actas contabilizadas · Elecciones Generales 2026 · Tablero generado con Claude (Anthropic)</footer>
+</div>
+
+<script>
+/* ── Datos con horas ya imputadas al rango [7, 14] ── */
+const RAW = [{"h":7.367,"p":83.61},{"h":7.583,"p":67.33},{"h":7.0,"p":81.0},{"h":7.0,"p":80.67},{"h":9.5,"p":72.58},{"h":8.25,"p":85.33},{"h":8.6,"p":69.9},{"h":7.967,"p":74.67},{"h":9.333,"p":82.33},{"h":7.8,"p":78.6},{"h":7.633,"p":73.0},{"h":7.083,"p":93.64},{"h":8.25,"p":68.79},{"h":14.0,"p":78.57},{"h":9.317,"p":85.62},{"h":9.383,"p":80.27},{"h":7.0,"p":79.6},{"h":7.1,"p":74.0},{"h":7.383,"p":88.67},{"h":7.633,"p":61.74},{"h":7.0,"p":80.33},{"h":9.733,"p":77.26},{"h":9.333,"p":83.0},{"h":9.0,"p":77.93},{"h":7.2,"p":75.33},{"h":7.0,"p":93.31},{"h":7.567,"p":74.92},{"h":7.067,"p":82.61},{"h":7.5,"p":68.33},{"h":7.5,"p":69.67},{"h":7.35,"p":76.67},{"h":7.0,"p":86.29},{"h":7.0,"p":90.33},{"h":7.167,"p":85.28},{"h":7.0,"p":88.78},{"h":7.0,"p":84.33},{"h":7.483,"p":71.57},{"h":7.8,"p":81.94},{"h":7.117,"p":83.61},{"h":8.0,"p":78.67},{"h":8.75,"p":84.95},{"h":8.95,"p":75.25},{"h":7.75,"p":80.27},{"h":7.017,"p":80.0},{"h":7.8,"p":73.33},{"h":8.05,"p":79.26},{"h":8.05,"p":74.0},{"h":7.5,"p":74.92},{"h":8.933,"p":78.6},{"h":7.667,"p":80.67},{"h":7.567,"p":79.53},{"h":7.0,"p":71.57},{"h":7.1,"p":78.0},{"h":7.017,"p":81.67},{"h":7.317,"p":82.61},{"h":7.483,"p":71.91},{"h":8.5,"p":75.0},{"h":7.0,"p":78.33},{"h":10.933,"p":86.62},{"h":7.583,"p":83.28},{"h":9.167,"p":86.67},{"h":11.283,"p":73.91},{"h":7.167,"p":72.58},{"h":9.233,"p":67.45},{"h":7.9,"p":74.0},{"h":7.5,"p":72.0},{"h":10.5,"p":78.86},{"h":9.067,"p":87.0},{"h":9.35,"p":88.67},{"h":11.417,"p":74.92},{"h":9.25,"p":85.33},{"h":8.033,"p":76.0},{"h":7.0,"p":87.96},{"h":7.667,"p":83.33},{"h":7.0,"p":89.67},{"h":8.2,"p":77.0},{"h":7.683,"p":75.92},{"h":7.8,"p":77.0},{"h":10.0,"p":58.33},{"h":7.0,"p":81.94},{"h":9.783,"p":93.33},{"h":8.167,"p":79.33},{"h":7.0,"p":81.6},{"h":7.3,"p":79.0},{"h":10.9,"p":83.67},{"h":8.167,"p":76.0},{"h":8.0,"p":76.0},{"h":7.217,"p":95.65},{"h":7.333,"p":80.67},{"h":7.167,"p":83.33},{"h":7.117,"p":76.25},{"h":7.833,"p":84.67},{"h":13.833,"p":72.0},{"h":8.0,"p":71.67},{"h":7.167,"p":80.67},{"h":7.0,"p":88.0},{"h":7.0,"p":78.7},{"h":11.25,"p":79.93},{"h":11.333,"p":96.33},{"h":7.217,"p":79.33},{"h":7.0,"p":82.0},{"h":10.95,"p":78.26},{"h":7.25,"p":74.33},{"h":7.167,"p":82.67},{"h":7.133,"p":91.97},{"h":7.0,"p":83.67},{"h":7.5,"p":92.31},{"h":7.417,"p":84.95},{"h":7.217,"p":68.7},{"h":7.0,"p":77.67},{"h":7.467,"p":92.0},{"h":7.4,"p":73.33},{"h":7.083,"p":82.0},{"h":8.567,"p":70.57},{"h":7.0,"p":91.33},{"h":7.5,"p":75.33},{"h":7.0,"p":71.67},{"h":8.05,"p":84.33},{"h":7.15,"p":84.67},{"h":7.0,"p":80.33},{"h":8.833,"p":75.67},{"h":7.0,"p":68.23},{"h":9.467,"p":78.93},{"h":10.583,"p":75.43},{"h":7.917,"p":82.27},{"h":11.917,"p":69.67},{"h":7.0,"p":85.33},{"h":8.783,"p":65.89},{"h":7.0,"p":74.33},{"h":7.35,"p":80.6},{"h":7.667,"p":90.0},{"h":7.95,"p":70.9},{"h":8.217,"p":71.24},{"h":7.05,"p":76.0},{"h":7.0,"p":75.33},{"h":7.6,"p":94.33},{"h":9.0,"p":72.24},{"h":11.567,"p":84.67},{"h":7.5,"p":69.0},{"h":7.0,"p":86.0},{"h":7.883,"p":76.33},{"h":8.517,"p":73.67},{"h":7.333,"p":81.27},{"h":8.25,"p":83.33},{"h":7.367,"p":74.58},{"h":7.217,"p":86.67},{"h":7.0,"p":82.67},{"h":7.117,"p":74.0},{"h":7.25,"p":81.94},{"h":11.583,"p":81.67},{"h":9.45,"p":81.67},{"h":8.567,"p":83.95},{"h":8.517,"p":75.67},{"h":7.25,"p":86.67},{"h":7.717,"p":72.33},{"h":12.7,"p":57.83},{"h":9.3,"p":77.33},{"h":7.3,"p":77.67},{"h":7.717,"p":80.27},{"h":7.633,"p":67.56},{"h":7.017,"p":81.6},{"h":7.333,"p":86.33},{"h":7.75,"p":90.33},{"h":7.0,"p":75.33},{"h":7.533,"p":94.33},{"h":7.233,"p":83.67},{"h":7.2,"p":86.78},{"h":7.25,"p":82.67},{"h":7.0,"p":84.67},{"h":9.8,"p":94.31},{"h":7.8,"p":72.0},{"h":7.85,"p":78.6},{"h":7.0,"p":63.67},{"h":8.283,"p":65.44},{"h":7.833,"p":74.83},{"h":7.0,"p":75.59},{"h":8.283,"p":85.0},{"h":10.5,"p":87.67},{"h":7.717,"p":75.67},{"h":7.333,"p":82.67},{"h":9.033,"p":72.67},{"h":7.0,"p":73.58},{"h":7.567,"p":79.67},{"h":7.25,"p":88.63},{"h":7.05,"p":85.62},{"h":7.0,"p":79.0},{"h":7.3,"p":78.33},{"h":11.533,"p":66.67},{"h":7.367,"p":74.25},{"h":7.383,"p":84.33},{"h":7.0,"p":100.0},{"h":7.0,"p":79.49},{"h":13.5,"p":84.28},{"h":8.667,"p":79.93},{"h":8.133,"p":79.67},{"h":7.867,"p":77.0},{"h":7.05,"p":82.33},{"h":7.0,"p":88.0},{"h":10.933,"p":84.67},{"h":7.317,"p":79.92},{"h":8.3,"p":63.64},{"h":11.3,"p":72.0},{"h":7.5,"p":83.28},{"h":7.3,"p":86.0},{"h":10.25,"p":83.95},{"h":7.5,"p":67.83},{"h":7.083,"p":95.67},{"h":8.45,"p":80.6},{"h":10.617,"p":72.91},{"h":7.683,"p":78.6},{"h":7.967,"p":79.93},{"h":7.0,"p":92.0},{"h":10.95,"p":78.6},{"h":7.0,"p":76.33},{"h":7.183,"p":93.0},{"h":8.783,"p":74.67},{"h":7.0,"p":74.33},{"h":7.167,"p":81.33},{"h":7.5,"p":81.67},{"h":7.0,"p":77.67},{"h":8.467,"p":66.78},{"h":7.0,"p":75.92},{"h":7.0,"p":80.27},{"h":7.3,"p":82.0},{"h":7.0,"p":87.5},{"h":8.667,"p":77.93},{"h":8.783,"p":69.36},{"h":7.167,"p":87.0},{"h":9.617,"p":80.27},{"h":7.0,"p":83.95},{"h":7.133,"p":86.33},{"h":8.65,"p":84.95},{"h":8.3,"p":89.0},{"h":9.333,"p":81.0},{"h":7.833,"p":86.0},{"h":8.65,"p":76.59},{"h":8.7,"p":79.0},{"h":7.083,"p":83.0},{"h":7.517,"p":83.67},{"h":8.2,"p":75.33},{"h":7.0,"p":86.0},{"h":7.0,"p":64.78},{"h":8.133,"p":81.67},{"h":10.0,"p":80.33},{"h":7.0,"p":81.33},{"h":7.7,"p":73.04},{"h":7.85,"p":75.67},{"h":7.167,"p":91.67},{"h":7.267,"p":86.96},{"h":7.15,"p":90.59},{"h":7.0,"p":82.67},{"h":7.567,"p":90.97},{"h":7.35,"p":79.0},{"h":7.883,"p":74.33},{"h":11.0,"p":84.62},{"h":7.0,"p":90.64},{"h":7.05,"p":80.0},{"h":7.417,"p":77.59},{"h":7.083,"p":78.67},{"h":9.367,"p":77.59},{"h":8.567,"p":60.2},{"h":7.733,"p":74.0},{"h":8.317,"p":74.33},{"h":7.633,"p":84.62},{"h":7.233,"p":78.0},{"h":9.9,"p":76.59},{"h":7.25,"p":77.26},{"h":7.667,"p":83.0},{"h":12.75,"p":90.3},{"h":8.467,"p":78.0},{"h":7.917,"p":76.17},{"h":12.5,"p":82.55},{"h":7.0,"p":85.28},{"h":7.0,"p":81.67},{"h":7.167,"p":79.93},{"h":13.667,"p":80.6},{"h":7.383,"p":90.0},{"h":13.517,"p":81.6},{"h":8.067,"p":83.95},{"h":8.05,"p":76.0},{"h":7.717,"p":82.0},{"h":10.5,"p":76.82},{"h":7.0,"p":78.93},{"h":7.083,"p":70.57},{"h":11.35,"p":64.0},{"h":7.5,"p":75.22},{"h":7.0,"p":74.92},{"h":9.783,"p":78.6},{"h":7.667,"p":76.0},{"h":8.833,"p":82.67},{"h":10.3,"p":75.92},{"h":7.233,"p":71.67},{"h":7.0,"p":75.59},{"h":11.317,"p":70.67},{"h":7.317,"p":97.33},{"h":10.083,"p":84.0},{"h":8.167,"p":74.25},{"h":7.0,"p":79.0},{"h":7.417,"p":80.44},{"h":11.75,"p":83.0},{"h":7.35,"p":78.67},{"h":9.083,"p":83.61},{"h":8.833,"p":84.0},{"h":7.083,"p":80.67},{"h":13.0,"p":81.67},{"h":9.5,"p":80.27},{"h":7.833,"p":91.33},{"h":7.617,"p":81.89},{"h":9.833,"p":74.25},{"h":7.05,"p":80.0},{"h":7.45,"p":79.93},{"h":7.233,"p":71.67},{"h":8.2,"p":81.0},{"h":7.667,"p":76.0},{"h":7.517,"p":79.93},{"h":7.683,"p":59.53},{"h":8.25,"p":83.33},{"h":7.0,"p":94.31},{"h":9.167,"p":71.33},{"h":8.75,"p":83.0},{"h":7.0,"p":84.33},{"h":7.783,"p":83.67},{"h":7.0,"p":93.33},{"h":8.55,"p":76.33},{"h":8.983,"p":88.96},{"h":7.25,"p":74.24},{"h":7.2,"p":85.67},{"h":7.6,"p":75.33},{"h":7.267,"p":87.0},{"h":14.0,"p":82.27},{"h":7.783,"p":78.0},{"h":10.45,"p":84.62},{"h":7.383,"p":75.25},{"h":8.833,"p":81.6},{"h":7.383,"p":83.33},{"h":7.867,"p":90.33},{"h":8.333,"p":65.22},{"h":7.0,"p":84.43},{"h":7.15,"p":88.67},{"h":9.5,"p":80.0},{"h":7.183,"p":77.0},{"h":7.0,"p":79.12},{"h":8.667,"p":77.67},{"h":14.0,"p":81.27},{"h":8.767,"p":79.33},{"h":8.15,"p":89.67},{"h":9.1,"p":81.33},{"h":7.467,"p":82.33},{"h":9.0,"p":74.67},{"h":8.75,"p":79.26},{"h":7.0,"p":85.33},{"h":7.5,"p":75.0},{"h":7.0,"p":84.67},{"h":7.583,"p":86.33},{"h":8.067,"p":75.0},{"h":7.0,"p":90.64},{"h":7.1,"p":69.0},{"h":7.117,"p":66.67},{"h":7.0,"p":78.33},{"h":8.383,"p":62.54},{"h":7.0,"p":80.33},{"h":7.25,"p":76.0},{"h":7.5,"p":68.33},{"h":7.283,"p":83.28},{"h":7.0,"p":73.67},{"h":8.117,"p":81.94},{"h":7.6,"p":69.9},{"h":9.333,"p":85.95},{"h":7.25,"p":80.94},{"h":9.55,"p":71.24},{"h":8.067,"p":72.0},{"h":8.0,"p":78.33},{"h":7.75,"p":86.33},{"h":9.617,"p":72.24},{"h":7.25,"p":86.33},{"h":9.0,"p":85.62},{"h":9.833,"p":69.9},{"h":7.717,"p":72.91},{"h":8.5,"p":72.33}];
+
+/* ── helpers ── */
+function hhmm(h){ const hh=Math.floor(h),mm=Math.round((h-hh)*60); return hh.toString().padStart(2,'0')+':'+mm.toString().padStart(2,'0'); }
+function linReg(pts){ const n=pts.length,mx=pts.reduce((s,d)=>s+d.x,0)/n,my=pts.reduce((s,d)=>s+d.y,0)/n,num=pts.reduce((s,d)=>s+(d.x-mx)*(d.y-my),0),den=pts.reduce((s,d)=>s+(d.x-mx)**2,0); return{m:num/den,b:my-(num/den)*mx}; }
+
+/* ── Chart.js defaults ── */
+Chart.defaults.color='#7a8099';
+Chart.defaults.borderColor='rgba(255,255,255,0.06)';
+Chart.defaults.font.family="'DM Mono',monospace";
+Chart.defaults.font.size=11;
+
+const tooltipDefaults = {
+  backgroundColor:'#1c2030',
+  titleColor:'#e8eaf0',
+  bodyColor:'#7a8099',
+  borderColor:'rgba(255,255,255,0.1)',
+  borderWidth:1,
+  padding:10
+};
+const scaleX = {
+  grid:{color:'rgba(255,255,255,0.04)'},
+  title:{display:true,text:'Hora de instalación',color:'#7a8099'},
+  min:7, max:14,
+  ticks:{callback:v=>hhmm(v),stepSize:1,color:'#4a5068'}
+};
+const scaleY = {
+  grid:{color:'rgba(255,255,255,0.04)'},
+  title:{display:true,text:'Participación (%)',color:'#7a8099'},
+  min:50, max:105,
+  ticks:{callback:v=>v+'%',color:'#4a5068'}
+};
+
+/* ── SCATTER ── */
+const pts = RAW.map(d=>({x:d.h,y:d.p}));
+const {m,b} = linReg(pts);
+new Chart(document.getElementById('scatterChart'),{
+  type:'scatter',
+  data:{ datasets:[
+    { data:pts, backgroundColor:'rgba(79,142,247,0.45)', pointRadius:4, pointHoverRadius:7, pointBorderWidth:0 },
+    { data:[{x:7,y:m*7+b},{x:14,y:m*14+b}], type:'line', borderColor:'#e85d3a', borderWidth:2, pointRadius:0, fill:false, tension:0 }
+  ]},
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false}, tooltip:{...tooltipDefaults, callbacks:{label:ctx=>ctx.datasetIndex===1?null:`${ctx.raw.y.toFixed(1)}% @ ${hhmm(ctx.raw.x)}`}} },
+    scales:{ x:scaleX, y:scaleY }
+  }
+});
+
+/* ── BAR ── */
+const byH={};
+RAW.forEach(d=>{ const h=Math.floor(d.h); if(!byH[h]) byH[h]={s:0,c:0}; byH[h].s+=d.p; byH[h].c++; });
+const hkeys = Object.keys(byH).map(Number).sort((a,b)=>a-b);
+const barLabels = hkeys.map(h=>hhmm(h));
+const barData   = hkeys.map(h=>+(byH[h].s/byH[h].c).toFixed(1));
+const barCounts = hkeys.map(h=>byH[h].c);
+const barColors = barData.map(v=>v>=80?'rgba(52,201,139,0.85)':v>=77?'rgba(79,142,247,0.85)':'rgba(232,93,58,0.85)');
+
+new Chart(document.getElementById('barChart'),{
+  type:'bar',
+  data:{ labels:barLabels, datasets:[{ data:barData, backgroundColor:barColors, borderRadius:5, borderSkipped:false }] },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{...tooltipDefaults, callbacks:{
+        title: ctx => `Franja ${ctx[0].label}`,
+        label: ctx => `Participación prom.: ${ctx.raw.toFixed(1)}%`,
+        afterLabel: ctx => `Mesas: ${barCounts[ctx.dataIndex]}`
+      }},
+      /* inline data labels */
+      datalabels: false
+    },
+    scales:{
+      x:{ grid:{display:false}, title:{display:true,text:'Franja horaria',color:'#7a8099'}, ticks:{color:'#4a5068'} },
+      y:{ ...scaleY }
+    }
+  },
+  plugins:[{
+    id:'countLabels',
+    afterDatasetsDraw(chart){
+      const {ctx,data,scales:{x,y}} = chart;
+      ctx.save();
+      ctx.font="bold 10px 'DM Mono',monospace";
+      ctx.fillStyle='rgba(255,255,255,0.35)';
+      ctx.textAlign='center';
+      data.datasets[0].data.forEach((val,i)=>{
+        const xPos=x.getPixelForValue(i), yPos=y.getPixelForValue(val);
+        ctx.fillText('n='+barCounts[i], xPos, yPos-6);
+      });
+      ctx.restore();
+    }
+  }]
+});
+</script>
+</body>
+</html>
