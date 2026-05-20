@@ -20,7 +20,7 @@
 clear all
 set more off
 
-global dir		"D:\MEGA\Publicaciones\1. Artículos\10. Elecciones - abril 2026"
+global dir		"D:\directorio"
 global input	"$dir\1. Input"
 global temp		"$dir\2. Temp"
 global output	"$dir\3. Output"
