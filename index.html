@@ -12,13 +12,13 @@
     --bg: #0d0f14;
     --surface: #151820;
     --surface2: #1c2030;
-    --border: rgba(255,255,255,0.99);
+    --border: rgba(0,0,0,0.10);
     --accent: #4f8ef7;
     --accent2: #e85d3a;
     --accent3: #34c98b;
-    --text: #e8eaf0;
-    --text-muted: #7a8099;
-    --text-dim: #4a5068;
+    --text: #0d0f14;
+    --text-muted: #4a5068;
+    --text-dim: #9aa0b8;
     --font-head: 'Syne', sans-serif;
     --font-mono: 'DM Mono', monospace;
   }
@@ -30,18 +30,7 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(79,142,247,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(79,142,247,0.03) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .container {
+    .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2.5rem 2rem 4rem;
