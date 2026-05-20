@@ -272,7 +272,10 @@
         <span><span class="leg-sq" style="background:rgba(26,86,160,0.55)"></span>Mesa individual</span>
         <span><span class="leg-line" style="background:#c0392b"></span>Línea de tendencia</span>
       </div>
-      <div class="note">La columna vertical en 07:00 incluye las 36 mesas imputadas al límite inferior del rango oficial.</div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-align:left; margin-top:8px;">
+        Elaboración propia
+      </div>
+      <div class="note">Nota: La columna vertical en 07:00 incluye las 36 mesas imputadas al límite inferior del rango oficial.</div>
     </div>
 
     <div class="card">
@@ -283,12 +286,15 @@
         <span><span class="leg-sq" style="background:rgba(26,86,160,0.8)"></span>Media (77–80%)</span>
         <span><span class="leg-sq" style="background:rgba(192,57,43,0.8)"></span>Baja (&lt; 77%)</span>
       </div>
-      <div class="note">Franja 07h concentra el 62.5% de mesas (n = 237). El número encima de cada barra indica cuántas mesas componen esa franja.</div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-align:left; margin-top:8px;">
+        Elaboración propia
+      </div>
+      <div class="note">Nota: Franja 07h concentra el 62.5% de mesas (n = 237). El número encima de cada barra indica cuántas mesas componen esa franja.</div>
     </div>
   </div>
 
   <!-- INSIGHT BANNER -->
-</br></br>
+  </br></br>
   <div class="insight">
     <div class="insight-item">
       <span class="insight-tag">🗳️ Participación ciudadana estimada</span>
@@ -298,6 +304,39 @@
       <span class="insight-tag">✍️ Reducción de votantes</span>
       <span class="insight-text">· En una mesa de sufragio con 300 electores, la reducción de votantes, según las horas de demora, fue máximo de 11.</span>
     </div>
+  </div>
+  
+  <!-- GRÁFICOS-->
+  <div class="charts-row" style="margin-top:1.5rem;">
+    
+    <!-- Gráfico 1: Participación ciudadana estimada -->
+    <div class="card" style="animation-delay:.55s;">
+      <div class="card-title">Participación ciudadana estimada</div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:1rem; line-height:1.6;">
+        Una hora de retraso en el inicio de la votación en una mesa de sufragio, se relaciona con una reducción de la participación ciudadana de 0.5% (menos de 1%) [no es causalidad].
+      </p>
+      <div style="position:relative;height:240px">
+        <canvas id="participacionChart"></canvas>
+      </div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-align:left; margin-top:8px;">
+        Elaboración propia
+      </div>
+    </div>
+
+    <!-- Gráfico 2: Reducción de votantes -->
+    <div class="card" style="animation-delay:.62s;">
+      <div class="card-title">Reducción de votantes</div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:1rem; line-height:1.6;">
+        En una mesa de sufragio con 300 electores, la reducción de votantes, según las horas de demora, fue máximo de 11.
+      </p>
+      <div style="position:relative;height:240px">
+        <canvas id="reduccionChart"></canvas>
+      </div>
+      <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-dim); text-align:left; margin-top:8px;">
+        Elaboración propia
+      </div>
+    </div>
+
   </div>
 
   <footer>Elaboración propia · Repositorio GitHub: <a href="https://github.com/kevinaleyaparcana/elecciones2026_1era_vuelta.github.io">https://github.com/kevinaleyaparcana/elecciones2026_1era_vuelta.github.io</a>
@@ -392,6 +431,129 @@ new Chart(document.getElementById('barChart'),{
       data.datasets[0].data.forEach((val,i)=>{
         const xPos=x.getPixelForValue(i), yPos=y.getPixelForValue(val);
         ctx.fillText('n='+barCounts[i], xPos, yPos-6);
+      });
+      ctx.restore();
+    }
+  }]
+});
+  
+/* GRÁFICO 1: PARTICIPACIÓN CIUDADANA ESTIMADA */
+const participacionLabels = ['7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+const participacionData = [84.0, 83.5, 82.9, 82.4, 81.8, 81.3, 80.8, 80.2];
+
+new Chart(document.getElementById('participacionChart'), {
+  type: 'bar',
+  data: {
+    labels: participacionLabels,
+    datasets: [{
+      data: participacionData,
+      backgroundColor: 'rgba(26,86,160,0.75)',
+      borderRadius: 4,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        ...tooltipDefaults,
+        callbacks: {
+          label: ctx => `Participación: ${ctx.raw.toFixed(1)}%`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#8a93aa', font: { size: 10 } }
+      },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        min: 79,
+        max: 85,
+        ticks: {
+          callback: v => v + '%',
+          color: '#8a93aa',
+          stepSize: 1
+        }
+      }
+    }
+  },
+  plugins: [{
+    id: 'participacionLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx, data, scales: { x, y } } = chart;
+      ctx.save();
+      ctx.font = "bold 10px 'DM Mono',monospace";
+      ctx.fillStyle = 'rgba(0,0,0,0.5)';
+      ctx.textAlign = 'center';
+      data.datasets[0].data.forEach((val, i) => {
+        const xPos = x.getPixelForValue(i);
+        const yPos = y.getPixelForValue(val);
+        ctx.fillText(val.toFixed(1) + '%', xPos, yPos - 6);
+      });
+      ctx.restore();
+    }
+  }]
+});
+
+/* GRÁFICO 2: REDUCCIÓN DE VOTANTES */
+const reduccionLabels = ['7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+const reduccionData = [0, 2, 3, 5, 6, 8, 10, 11];
+
+new Chart(document.getElementById('reduccionChart'), {
+  type: 'bar',
+  data: {
+    labels: reduccionLabels,
+    datasets: [{
+      data: reduccionData,
+      backgroundColor: reduccionData.map(v => v === 0 ? 'rgba(26,86,160,0.25)' : 'rgba(26,86,160,0.75)'),
+      borderRadius: 4,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        ...tooltipDefaults,
+        callbacks: {
+          label: ctx => `Reducción: ${ctx.raw} votantes`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#8a93aa', font: { size: 10 } }
+      },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        min: 0,
+        max: 13,
+        ticks: {
+          color: '#8a93aa',
+          stepSize: 2
+        }
+      }
+    }
+  },
+  plugins: [{
+    id: 'reduccionLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx, data, scales: { x, y } } = chart;
+      ctx.save();
+      ctx.font = "bold 11px 'DM Mono',monospace";
+      ctx.fillStyle = 'rgba(0,0,0,0.5)';
+      ctx.textAlign = 'center';
+      data.datasets[0].data.forEach((val, i) => {
+        const xPos = x.getPixelForValue(i);
+        const yPos = y.getPixelForValue(val);
+        ctx.fillText(String(val), xPos, yPos - 6);
       });
       ctx.restore();
     }
