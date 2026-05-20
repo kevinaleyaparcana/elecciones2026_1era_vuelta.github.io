@@ -184,6 +184,32 @@
     line-height: 1.55;
   }
 
+  /* ── Insight banner ── */
+  .insight {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+    border-radius: 8px;
+    padding: 1rem 1.35rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    animation: fadeUp 0.5s ease 0.22s both;
+  }
+  .insight-item { flex: 1; min-width: 200px; }
+  .insight-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent3);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .insight-text { font-size: 13px; color: var(--text); line-height: 1.55; }
+  
   /* ── Footer ── */
   footer {
     margin-top: 3rem;
