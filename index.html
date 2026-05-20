@@ -12,13 +12,13 @@
     --bg: #0d0f14;
     --surface: #151820;
     --surface2: #1c2030;
-    --border: rgba(0,0,0,0.10);
+    --border: rgba(255,255,255,0.07);
     --accent: #4f8ef7;
     --accent2: #e85d3a;
     --accent3: #34c98b;
-    --text: #0d0f14;
-    --text-muted: #4a5068;
-    --text-dim: #9aa0b8;
+    --text: #e8eaf0;
+    --text-muted: #7a8099;
+    --text-dim: #4a5068;
     --font-head: 'Syne', sans-serif;
     --font-mono: 'DM Mono', monospace;
   }
@@ -30,7 +30,18 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-    .container {
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2.5rem 2rem 4rem;
@@ -294,30 +305,30 @@ function hhmm(h){ const hh=Math.floor(h),mm=Math.round((h-hh)*60); return hh.toS
 function linReg(pts){ const n=pts.length,mx=pts.reduce((s,d)=>s+d.x,0)/n,my=pts.reduce((s,d)=>s+d.y,0)/n,num=pts.reduce((s,d)=>s+(d.x-mx)*(d.y-my),0),den=pts.reduce((s,d)=>s+(d.x-mx)**2,0); return{m:num/den,b:my-(num/den)*mx}; }
 
 /* ── Chart.js defaults ── */
-Chart.defaults.color='#0d0f14';
-Chart.defaults.borderColor='rgba(0,0,0,0.10)';
+Chart.defaults.color='#7a8099';
+Chart.defaults.borderColor='rgba(255,255,255,0.06)';
 Chart.defaults.font.family="'DM Mono',monospace";
 Chart.defaults.font.size=11;
 
 const tooltipDefaults = {
-  backgroundColor:'#ffffff',
-  titleColor:'#0d0f14',
-  bodyColor:'#4a5068',
-  borderColor:'rgba(0,0,0,0.12)',
+  backgroundColor:'#1c2030',
+  titleColor:'#e8eaf0',
+  bodyColor:'#7a8099',
+  borderColor:'rgba(255,255,255,0.1)',
   borderWidth:1,
   padding:10
 };
 const scaleX = {
-  grid:{color:'rgba(0,0,0,0.10)'},
+  grid:{color:'rgba(255,255,255,0.04)'},
   title:{display:true,text:'Hora de instalación',color:'#7a8099'},
   min:7, max:14,
-  ticks:{callback:v=>hhmm(v),stepSize:1,color:'#6b7280'}
+  ticks:{callback:v=>hhmm(v),stepSize:1,color:'#4a5068'}
 };
 const scaleY = {
-  grid:{color:'rgba(0,0,0,0.10)'},
+  grid:{color:'rgba(255,255,255,0.04)'},
   title:{display:true,text:'Participación (%)',color:'#7a8099'},
   min:50, max:105,
-  ticks:{callback:v=>v+'%',color:'#6b7280'}
+  ticks:{callback:v=>v+'%',color:'#4a5068'}
 };
 
 /* ── SCATTER ── */
@@ -361,7 +372,7 @@ new Chart(document.getElementById('barChart'),{
       datalabels: false
     },
     scales:{
-      x:{ grid:{display:false}, title:{display:true,text:'Franja horaria',color:'#7a8099'}, ticks:{color:'#6b7280'} },
+      x:{ grid:{display:false}, title:{display:true,text:'Franja horaria',color:'#7a8099'}, ticks:{color:'#4a5068'} },
       y:{ ...scaleY }
     }
   },
@@ -371,7 +382,7 @@ new Chart(document.getElementById('barChart'),{
       const {ctx,data,scales:{x,y}} = chart;
       ctx.save();
       ctx.font="bold 10px 'DM Mono',monospace";
-      ctx.fillStyle='rgba(0,0,0,0.4)';
+      ctx.fillStyle='rgba(255,255,255,0.35)';
       ctx.textAlign='center';
       data.datasets[0].data.forEach((val,i)=>{
         const xPos=x.getPixelForValue(i), yPos=y.getPixelForValue(val);
