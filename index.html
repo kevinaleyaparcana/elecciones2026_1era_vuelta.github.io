@@ -183,32 +183,6 @@
     margin-top: 9px;
     line-height: 1.55;
   }
-
-  /* ── Insight banner ── */
-  .insight {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--accent3);
-    border-radius: 8px;
-    padding: 1rem 1.35rem;
-    margin-bottom: 1.75rem;
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    animation: fadeUp 0.5s ease 0.22s both;
-  }
-  .insight-item { flex: 1; min-width: 200px; }
-  .insight-tag {
-    font-family: var(--font-mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent3);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .insight-text { font-size: 13px; color: var(--text); line-height: 1.55; }
   
   /* ── Footer ── */
   footer {
@@ -326,6 +300,191 @@
     </div>
   </div>
 
+<!-- NUEVOS GRÁFICOS RESUMEN -->
+<div style="
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  margin-top:2rem;
+">
+  
+  <!-- Gráfico 1 -->
+  <div style="
+    background:#f3f3f3;
+    padding:18px 20px 12px;
+    border:1px solid #d8d8d8;
+  ">
+    <div style="
+      font-size:15px;
+      line-height:1.15;
+      margin-bottom:10px;
+      color:#222;
+    ">
+      Una hora de retraso en el inicio de la votación en una mesa de sufragio,
+      se relaciona con una reducción de la participación ciudadana de 0.5%
+      (menos de 1%) [no es causalidad].
+    </div>
+
+    <div style="
+      text-align:center;
+      font-size:16px;
+      margin-bottom:8px;
+    ">
+      Participación ciudadana estimada
+    </div>
+
+    <div style="
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      height:90px;
+      margin-top:8px;
+      border-bottom:1px solid #cfcfcf;
+      padding:0 5px;
+    ">
+      <div style="text-align:center">
+        <div>84,0%</div>
+        <div style="width:34px;height:22px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">7:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>83,5%</div>
+        <div style="width:34px;height:20px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">8:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>82,9%</div>
+        <div style="width:34px;height:18px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">9:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>82,4%</div>
+        <div style="width:34px;height:16px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">10:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>81,8%</div>
+        <div style="width:34px;height:14px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">11:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>81,3%</div>
+        <div style="width:34px;height:12px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">12:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>80,8%</div>
+        <div style="width:34px;height:10px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">13:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>80,2%</div>
+        <div style="width:34px;height:8px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">14:00</div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;margin-top:10px">
+      Elaboración propia
+    </div>
+  </div>
+
+  <!-- Gráfico 2 -->
+  <div style="
+    background:#f3f3f3;
+    padding:18px 20px 12px;
+    border:1px solid #d8d8d8;
+  ">
+    <div style="
+      font-size:15px;
+      line-height:1.15;
+      margin-bottom:10px;
+      color:#222;
+    ">
+      En una mesa de sufragio con 300 electores, la reducción de votantes,
+      según las horas de demora, fue máximo de 11.
+    </div>
+
+    <div style="
+      text-align:center;
+      font-size:16px;
+      margin-bottom:8px;
+    ">
+      Reducción de votantes
+    </div>
+
+    <div style="
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      height:90px;
+      margin-top:8px;
+      border-bottom:1px solid #cfcfcf;
+      padding:0 5px;
+    ">
+      <div style="text-align:center">
+        <div>0</div>
+        <div style="width:34px;height:2px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">7:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>2</div>
+        <div style="width:34px;height:4px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">8:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>3</div>
+        <div style="width:34px;height:7px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">9:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>5</div>
+        <div style="width:34px;height:10px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">10:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>6</div>
+        <div style="width:34px;height:13px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">11:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>8</div>
+        <div style="width:34px;height:17px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">12:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>10</div>
+        <div style="width:34px;height:21px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">13:00</div>
+      </div>
+
+      <div style="text-align:center">
+        <div>11</div>
+        <div style="width:34px;height:24px;background:#1f3763;margin:auto"></div>
+        <div style="margin-top:6px">14:00</div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;margin-top:10px">
+      Elaboración propia
+    </div>
+  </div>
+
+</div>
+  
   <footer>Elaboración propia · Repositorio GitHub: <a href="https://github.com/kevinaleyaparcana/elecciones2026_1era_vuelta.github.io">https://github.com/kevinaleyaparcana/elecciones2026_1era_vuelta.github.io</a>
      </br></br>
     Fuente: Oficina Nacional de Procesos Electorales (ONPE). Resultados de las Elecciones Generales Presidenciales – Primera  vuelta (portal web). Fecha de corte: 2026-05-17 · Enlace: <a href="https://resultadoelectoral.onpe.gob.pe/main/actas">https://resultadoelectoral.onpe.gob.pe/main/actas</a></footer>
