@@ -13,7 +13,6 @@
 	Nivel de confianza: 95%
 	Margen de error: 5%
 	Varianza: p=0.5 (máxima)
-	Estratos: 43 distritos
 -------------------------------------------------------*/
 
 * Configuración de la ruta de trabajo
