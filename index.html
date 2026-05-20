@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tablero Electoral Lima 2026 — Hora de Instalación vs. Participación</title>
+<title>Tablero Elección Presidenciales 2026 - Provincia de Lima — Inicio de votación vs. Participación</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -211,58 +211,62 @@
 
   <!-- HEADER -->
   <header>
-    <div class="header-tag">ONPE · Elecciones Generales 2026 · Lima, Perú</div>
-    <h1>Hora de instalación de mesa<br><span>vs. Participación ciudadana</span></h1>
+    <div class="header-tag">Elección Presidenciales 2026 · Primera vuelta · Perú · Provincia de Lima</div>
+    <h1>Relación entre la hora de inicio de la votación<br><span>y la participación ciudadana</span></h1>
     <div class="header-sub">
-      Muestra: 379 mesas contabilizadas · 40 distritos · Provincia de Lima<br>
-      Horas imputadas al rango oficial: mesas antes de 07:00 → 07:00 · mesas después de 14:00 → 14:00
+      Muestreo aleatorio simple: 379 mesas contabilizadas · 40 distritos <br>
+      Fuente: Actas de resultados de Elecciones presidenciales 2026 - primera vuelta, con fecha de corte al 2026-05-17 - ONPE <br>
+      Elaborado por: Kevin Aley Aparcana
     </div>
   </header>
 
   <!-- KPIs -->
   <div class="kpi-row">
     <div class="kpi" style="--kpi-accent:#1a56a0">
-      <div class="kpi-label">Participación promedio</div>
+      <div class="kpi-label">Participación promedio (muestra)</div>
       <div class="kpi-val">79.7%</div>
-      <div class="kpi-sub">sobre 379 mesas válidas</div>
+      <div class="kpi-sub">Sobre 379 mesas de sufragio</div>
     </div>
     <div class="kpi" style="--kpi-accent:#c0392b">
-      <div class="kpi-label">Hora promedio instalación</div>
-      <div class="kpi-val">08:09</div>
-      <div class="kpi-sub">rango oficial: 07:00 – 14:00</div>
+      <div class="kpi-label">Participación promedio (población)</div>
+      <div class="kpi-val">80.0%</div>
+      <div class="kpi-sub">Sobre 26368 mesas de sufragio</div>
     </div>
     <div class="kpi" style="--kpi-accent:#6d4fc2">
-      <div class="kpi-label">Correlación Pearson r</div>
-      <div class="kpi-val" style="color:#6d4fc2">−0.111</div>
-      <div class="kpi-sub">p = 0.031 · significativa (α = 5%)</div>
+      <div class="kpi-label">Hora promedio inicio votación</div>
+      <div class="kpi-val" style="color:#6d4fc2">08:09</div>
+      <div class="kpi-sub">Rango oficial: 07:00 – 14:00</div>
     </div>
     <div class="kpi" style="--kpi-accent:#b45309">
-      <div class="kpi-label">Mesas registradas antes 7am</div>
-      <div class="kpi-val" style="color:#b45309">36</div>
-      <div class="kpi-sub">9.5% del total · imputadas a 07:00</div>
+      <div class="kpi-label">Coeficiente MCO</div>
+      <div class="kpi-val" style="color:#b45309">-0.005</div>
+      <div class="kpi-sub">p = 0.031 · significativa (α = 5%)</div>
     </div>
   </div>
 
   <!-- INSIGHT BANNER -->
   <div class="insight">
     <div class="insight-item">
-      <span class="insight-tag">📌 Hallazgo principal</span>
-      <span class="insight-text">Existe una correlación negativa débil pero estadísticamente significativa (r = −0.111, p &lt; 0.05): a mayor hora de instalación, menor participación ciudadana.</span>
+      <span class="insight-tag">📌 Conclusión principal</span>
+      <span class="insight-text">La demora del inicio de la votación en una mesa tendría una incidencia mínima en la cantidad votantes.</br>
+        Las mesas que iniciaron a las 2pm tienen solo 3.5% menos de participación que las que iniciaron a las 7am.</span>
     </div>
     <div class="insight-item">
-      <span class="insight-tag">⏰ Franja de mayor participación</span>
-      <span class="insight-text">Las 237 mesas instaladas en la franja de las <strong>07:00</strong> (62.5% del total) registran la mayor participación promedio: <strong>80.5%</strong>.</span>
+      <span class="insight-tag">⏰ Participación por franjas horarias </span>
+      <span class="insight-text"><strong>07:00-7:59</strong> 62.5% (237) mesas instaladas.</br>
+        <strong>07:00-11:59</strong> 96.1% (268) mesas instaladas.</span>
     </div>
     <div class="insight-item">
       <span class="insight-tag">⚠️ Imputación aplicada</span>
-      <span class="insight-text"><strong>36</strong> mesas con registro anterior a 07:00 fueron llevadas a 07:00. <strong>1</strong> mesa con registro posterior a 14:00 fue llevada a 14:00.</span>
+      <span class="insight-text"><strong>36</strong> mesas con registro anterior a 07:00 fueron llevadas a 07:00.</br>
+        <strong>1</strong> mesa con registro posterior a 14:00 fue llevada a 14:00.</span>
     </div>
   </div>
 
   <!-- CHARTS -->
   <div class="charts-row">
     <div class="card">
-      <div class="card-title">Dispersión — hora de instalación vs. participación ciudadana</div>
+      <div class="card-title">Hora de inicio de votación vs. Participación ciudadana</div>
       <div style="position:relative;height:320px"><canvas id="scatterChart"></canvas></div>
       <div class="legend">
         <span><span class="leg-sq" style="background:rgba(26,86,160,0.55)"></span>Mesa individual</span>
@@ -272,7 +276,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Participación promedio por franja horaria de instalación</div>
+      <div class="card-title">Participación ciudadana promedio por franja horaria de inicio de votación</div>
       <div style="position:relative;height:320px"><canvas id="barChart"></canvas></div>
       <div class="legend">
         <span><span class="leg-sq" style="background:rgba(26,122,74,0.8)"></span>Alta (≥ 80%)</span>
@@ -283,7 +287,7 @@
     </div>
   </div>
 
-  <footer>Fuente: ONPE — Muestra de actas contabilizadas · Elecciones Generales 2026 · Tablero generado con Claude (Anthropic)</footer>
+  <footer>Elaboración propia · Fuente: Oficina Nacional de Procesos Electorales (ONPE). Resultados de las Elecciones Generales Presidenciales – Primera  vuelta (portal web). Fecha de corte: 2026-05-17 · Enlace: https://resultadoelectoral.onpe.gob.pe/main/actas</footer>
 </div>
 
 <script>
@@ -314,7 +318,7 @@ const scaleX = {
 };
 const scaleY = {
   grid: { color: 'rgba(0,0,0,0.06)' },
-  title: { display:true, text:'Participación (%)', color:'#4a5578' },
+  title: { display:true, text:'Porcentaje de participación ciudadana', color:'#4a5578' },
   min:50, max:105,
   ticks: { callback:v=>v+'%', color:'#8a93aa' }
 };
