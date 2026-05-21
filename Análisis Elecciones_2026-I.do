@@ -17,7 +17,7 @@
 clear all
 set more off
 
-global dir		"D:\directorio"
+global dir		"D:\MEGA\Publicaciones\1. Artículos\10. Elecciones - abril 2026"
 global input	"$dir\1. Input"
 global temp		"$dir\2. Temp"
 global output	"$dir\3. Output"
@@ -75,7 +75,7 @@ display prom_hora_inicio_vot
 twoway ///
     (scatter particip_ciud hora_inicio_vot) ///
     (lfit particip_ciud hora_inicio_vot), ///
-    title("Hora de inicio de votación vs. Participación ciudadana") ///
+    title("Participación ciudadana vs. Hora de inicio de votación") ///
     xtitle("Hora de inicio de votación en la mesa de sufragio") ///
     ytitle("Porcentaje de participación ciudadana") ///
 	xlabel(7 "7:00" 8 "8:00" 9 "9:00" 10 "10:00" 11 "11:00" 12 "12:00" 13 "13:00" 14 "14:00") ///
@@ -83,10 +83,14 @@ twoway ///
 
 * Regresión
 reg particip_ciud hora_inicio_vot
+
+scalar beta_cons = _b[_cons]
+display beta_cons
+
 scalar beta_hora_inicio_vot = _b[hora_inicio_vot]
 display beta_hora_inicio_vot
 
-* Gráfico por horas
+* Gráficos por horas
 gen horas_ent = floor(hora_inicio_vot)
 	label define horas_lbl 7 "7:00" 8 "8:00" 9 "9:00" 10 "10:00" 11 "11:00" 12 "12:00" 13 "13:00" 14 "14:00"
 	label values horas_ent horas_lbl
@@ -96,7 +100,7 @@ graph bar ///
     title("Participación ciudadana (prom), según hora inicio votación") ///
 	ytitle("Porcentaje de participación ciudadana") ///
 	ylabel(0.2 "20%" 0.4 "40%" 0.6 "60%" 0.8 "80%" 1 "100%") ///
-	blabel(bar, format(%4.2f) position(outside))
+	blabel(bar, format(%5.3f) position(outside))
 
 graph bar ///
 	(count) n=particip_ciud, over(horas_ent) ///
@@ -114,21 +118,35 @@ scalar sum_electores_habil = 7822555
 	* Fuente: ONPE
 
 scalar votos_perdidos_tot = sum_electores_habil * (prom_hora_inicio_vot-7) * -beta_hora_inicio_vot
-display ceil(votos_perdidos_tot)
+display round(votos_perdidos_tot)
 
-* Reducción de votantes (votos perdidos) por mesa
+* Porcentaje de reducción de votantes (votos perdidos) total
+
+scalar porct_votos_perdidos_tot = (prom_hora_inicio_vot-7) * -beta_hora_inicio_vot
+display porct_votos_perdidos_tot
+
+* Reducción de votantes (votos perdidos) por mesa en promedio
 
 count
 scalar num_mesas = r(N)
 display num_mesas
 
-scalar votos_perdidos_mesa = votos_perdidos_tot/num_mesas
-display ceil(votos_perdidos_mesa)
+scalar votos_perdidos_mesa_prom = votos_perdidos_tot/num_mesas
+display votos_perdidos_mesa_prom
+display round(votos_perdidos_mesa_prom)
+
+* Porcentaje de participación ciudadana estimada según hora de inicio de votación
+
+forvalue k = 7/14 {
+scalar porct_part_mesa_prom_`k'h = ( beta_cons - (`k'-7) * -beta_hora_inicio_vot ) * 100
+display porct_part_mesa_prom_`k'h
+display round(porct_part_mesa_prom_`k'h,0.1)
+}
 
 * Reducción de votantes (votos perdidos) para mesa de 300 votantes según hora de inicio de votación
 
 forvalue k = 7/14 {
 scalar votos_perdidos_mesa_300v_`k'h = 300 * (`k'-7) * -beta_hora_inicio_vot
 display votos_perdidos_mesa_300v_`k'h
-display ceil(votos_perdidos_mesa_300v_`k'h)
+display round(votos_perdidos_mesa_300v_`k'h)
 }
